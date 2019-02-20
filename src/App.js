@@ -154,28 +154,39 @@ class App extends Component {
     });
   };
 
+  takePhoto = () => {
+    const data1 = this.canvas.toDataURL("image/jpeg");
+    console.log(data1);
+    var link = document.createElement("a");
+    link.href = data1;
+    link.setAttribute("download", "matrix");
+    link.innerHTML = `<img src="${data1}"/>`;
+    this.strip.insertBefore(link, this.strip.firstChild);
+  };
+
   render() {
     return (
-      <div id="container" style={{ backgroundColor: "black" }}>
-        <div id="description">
+      <div className="container">
+        <div className="description">
           For my Final Project I decided to do an Interactive Artwork inspired
           by the movie 'Matrix'. In the movie, there is a scene where the main
           character sees 'code' in his vision, overlayed on top of reality. I
-          thought it would be cool to recreate this effect using a webcam. There
-          were two main resources I used to create this project. (1) gave me an
-          outlined steps on how they went about changing the pixels of a webcam.
-          (2) helped me figure out how to get symbols to stream down.
+          thought it would be cool to recreate this effect using a webcam.
+          <br />
+          <br />
+          Please Enable Your Webcam!
         </div>
 
         <div>Make Sure Your Webcam is Enabled!</div>
-        <div id="controller">
+        <div className="controller">
           <button onClick={this.paintToCanvas}>Matrixify</button>
-          <button onClick={this.logStuff}>Take Photo</button>
+          <button onClick={this.takePhoto}>Take Photo</button>
         </div>
-        <canvas ref="canvas" width="640" height="480" />
+        <canvas ref="canvas" width="640" height="480" className="canvas" />
         {/* <Canvas /> */}
-        <video ref="video" />
-        <div ref="strip" />
+        <video ref="video" className="video" />
+        <div ref="strip" className="strip" />
+        <div className="footer" />
       </div>
     );
   }
