@@ -14,7 +14,7 @@
 importScripts("https://storage.googleapis.com/workbox-cdn/releases/3.6.3/workbox-sw.js");
 
 importScripts(
-  "/MatrixVision/precache-manifest.dc3d313a4a4607c2cea3e634305a9e10.js"
+  "/MatrixVision/precache-manifest.73da122480ab99b56fef4382cc0b7921.js"
 );
 
 workbox.clientsClaim();
