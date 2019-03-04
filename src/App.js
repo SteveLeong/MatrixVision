@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import "./App.css";
+import "./css/main.css";
 
 import Stream from "./components/stream";
 
@@ -183,7 +183,6 @@ class App extends Component {
           <button onClick={this.takePhoto}>Take Photo</button>
         </div>
         <canvas ref="canvas" width="640" height="480" className="canvas" />
-        {/* <Canvas /> */}
         <video ref="video" className="video" />
         <div ref="strip" className="strip" />
         <div className="footer" />

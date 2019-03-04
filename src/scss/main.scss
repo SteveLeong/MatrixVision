@@ -1,0 +1,45 @@
+$primary-color: green;
+$backgroundColor: black;
+.container {
+  background-color: $backgroundColor;
+  /* text-align: center; */
+  margin: auto;
+}
+
+.description {
+  color: $primary-color;
+  padding: 10px;
+  text-align: center;
+}
+
+.controller {
+  text-align: center;
+}
+
+.canvas {
+  padding-left: 15%;
+}
+
+.video {
+  width: 300px;
+  height: 225px;
+  position: absolute;
+  top: 20%;
+  right: 0px;
+}
+
+.strip {
+  height: 200px;
+  width: 100%;
+  margin: 20px;
+}
+
+.strip a img {
+  height: 90%;
+  width: 150px;
+  margin: 10px;
+}
+
+.footer {
+  height: 100px;
+}
