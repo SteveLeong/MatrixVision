@@ -1,25 +1,77 @@
-.container {
-  background-color: black;
-  /* text-align: center; */
-  margin: auto; }
+* {
+  text-transform: uppercase;
+  font-family: "brandon-grotesque", sans-serif;
+  letter-spacing: 0.2em;
+  font-weight: 500; }
+
+.main {
+  width: 85%;
+  padding-top: 75px;
+  position: absolute;
+  top: 0px;
+  left: 0;
+  right: 0;
+  margin-left: auto;
+  margin-right: auto; }
+  .main a {
+    font-size: 24px;
+    color: green;
+    text-decoration: none; }
+
+.navbar {
+  float: right;
+  margin-top: 10px; }
+  .navbar ul {
+    list-style: none;
+    list-style-image: none; }
+    .navbar ul li {
+      float: left;
+      color: #209116c9;
+      font-size: 16px;
+      position: relative;
+      margin-right: 50px; }
+      .navbar ul li a {
+        font-size: inherit;
+        -webkit-transition: all 0.2s ease-in-out;
+        -moz-transition: all 0.2s ease-in-out;
+        -o-transition: all 0.2s ease-in-out;
+        transition: all 0.2s ease-in-out; }
+
+.content {
+  width: 100%;
+  height: auto;
+  background-color: #202020; }
 
 .description {
-  color: green;
   padding: 10px;
   text-align: center; }
 
 .controller {
-  text-align: center; }
+  text-align: center;
+  float: right;
+  top: 60vh;
+  right: 10%;
+  position: relative;
+  height: 10em;
+  width: 20em;
+  margin: auto; }
+  .controller .row {
+    height: inherit; }
+    .controller .row .col {
+      margin: auto;
+      height: 50%; }
 
 .canvas {
-  padding-left: 15%; }
+  margin-left: 10%;
+  margin-top: 20vh;
+  background-color: black; }
 
 .video {
   width: 300px;
   height: 225px;
   position: absolute;
   top: 20%;
-  right: 0px; }
+  right: 10vw; }
 
 .strip {
   height: 200px;
@@ -28,7 +80,7 @@
 
 .strip a img {
   height: 90%;
-  width: 150px;
+  width: auto;
   margin: 10px; }
 
 .footer {

@@ -1,7 +1,10 @@
 import React, { Component } from "react";
+import { Row, Col, Button } from "antd";
+import "antd/dist/antd.css";
 import "./css/main.css";
 
 import Stream from "./components/stream";
+// import Column from "antd/lib/table/Column";
 
 class App extends Component {
   constructor(props) {
@@ -16,12 +19,15 @@ class App extends Component {
   componentDidMount() {
     this.video = this.refs.video;
     this.canvas = this.refs.canvas;
+    this.strip = this.refs.strip;
     this.ctx = this.canvas.getContext("2d");
+    this.ctx.fillStyle = "black";
+    this.ctx.fillRect(0, 0, this.canvas.width, this.canvas.height);
+    this.setUp();
+    this.ctx.fillStyle = "black";
+    this.ctx.fillRect(0, 0, this.canvas.width, this.canvas.height);
     this.ctx.font = "11px monospace";
     this.ctx.fillStyle = "#00BB00";
-    this.strip = this.refs.strip;
-
-    this.setUp();
   }
 
   setUp = () => {
@@ -57,6 +63,8 @@ class App extends Component {
   };
 
   getSymbols = () => {
+    this.ctx.font = "11px monospace";
+    this.ctx.fillStyle = "#00BB00";
     // Get Katakana symbols
     var xcoor = 0;
     var count = 0;
@@ -123,6 +131,8 @@ class App extends Component {
     this.symbols[this.symbols.length - 1] = this.symbolData[
       this.symbolData.length - 1
     ][1];
+
+    // this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
   };
 
   paintToCanvas = () => {
@@ -166,8 +176,40 @@ class App extends Component {
 
   render() {
     return (
-      <div className="container">
-        <div className="description">
+      <div>
+        <header className="main">
+          <a href="App.js">MatrixVision</a>
+          <nav className="navbar">
+            <ul>
+              <li>
+                <a href="">About</a>
+              </li>
+              <li>
+                <a href="">Contact</a>
+              </li>
+            </ul>
+          </nav>
+        </header>
+        <div className="content">
+          <div className="controller">
+            <Row className="row">
+              <Col span={24} gutter={16} className="col">
+                <Button onClick={this.paintToCanvas}>Matrixify</Button>
+              </Col>
+              <Col>
+                <Button onClick={this.takePhoto}>Take Photo</Button>
+              </Col>
+            </Row>
+          </div>
+          <canvas ref="canvas" width="640" height="480" className="canvas" />
+          <video ref="video" className="video" />
+          <div ref="strip" className="strip" />
+          <div className="footer" />
+        </div>
+      </div>
+    );
+    {
+      /* <div className="description">
           For my Final Project I decided to do an Interactive Artwork inspired
           by the movie 'Matrix'. In the movie, there is a scene where the main
           character sees 'code' in his vision, overlayed on top of reality. I
@@ -175,19 +217,12 @@ class App extends Component {
           <br />
           <br />
           Please Enable Your Webcam!
-        </div>
+        </div> */
+    }
 
-        <div>Make Sure Your Webcam is Enabled!</div>
-        <div className="controller">
-          <button onClick={this.paintToCanvas}>Matrixify</button>
-          <button onClick={this.takePhoto}>Take Photo</button>
-        </div>
-        <canvas ref="canvas" width="640" height="480" className="canvas" />
-        <video ref="video" className="video" />
-        <div ref="strip" className="strip" />
-        <div className="footer" />
-      </div>
-    );
+    {
+      /* <div>Make Sure Your Webcam is Enabled!</div> */
+    }
   }
 }
 
