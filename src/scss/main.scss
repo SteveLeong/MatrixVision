@@ -11,7 +11,7 @@ $backgroundColor: black;
 }
 .main {
   width: 85%;
-  padding-top: 75px;
+  padding-top: 60px;
   position: absolute;
   top: 0px;
   left: 0;
@@ -63,7 +63,7 @@ $backgroundColor: black;
   text-align: center;
   float: right;
   top: 60vh;
-  right: 10%;
+  right: 5vw;
   position: relative;
   height: 10em;
   width: 20em;
@@ -80,17 +80,29 @@ $backgroundColor: black;
 }
 
 .canvas {
+  width: 90%;
   margin-left: 10%;
   margin-top: 20vh;
   background-color: black;
+  border-color: #151911;
+  border-style: solid;
+  border-width: 20px 40px 20px 40px;
+  border-radius: 10px;
+  -webkit-box-shadow: 1px 2px 25px 10px rgba(0, 0, 0, 0.75);
+  -moz-box-shadow: 1px 2px 25px 10px rgba(0, 0, 0, 0.75);
+  box-shadow: 1px 2px 25px 10px rgba(0, 0, 0, 0.75);
 }
 
 .video {
-  width: 300px;
-  height: 225px;
+  width: 280px;
+  height: 210px;
   position: absolute;
   top: 20%;
-  right: 10vw;
+  right: 5vw;
+  border: 5px solid #151911;
+  -webkit-box-shadow: 1px 2px 50px 15px rgba(0, 0, 0, 0.75);
+  -moz-box-shadow: 1px 2px 50px 15px rgba(0, 0, 0, 0.75);
+  box-shadow: 1px 2px 50px 15px rgba(0, 0, 0, 0.75);
 }
 
 .strip {

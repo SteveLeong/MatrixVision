@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { Row, Col, Button } from "antd";
+import { Row, Col, Button, Popover } from "antd";
 import "antd/dist/antd.css";
 import "./css/main.css";
 
@@ -7,6 +7,11 @@ import Stream from "./components/stream";
 // import Column from "antd/lib/table/Column";
 
 class App extends Component {
+  state = {
+    video: false,
+    hover: false 
+  };
+
   constructor(props) {
     super(props);
 
@@ -55,9 +60,11 @@ class App extends Component {
           console.log(localMediaStream);
           video.srcObject = localMediaStream;
           video.play();
+          this.setState({ video: true });
         })
         .catch(err => {
           console.error("Please enable your webcam", err);
+          console.log(this.state.video);
         });
     }
   };
@@ -174,7 +181,15 @@ class App extends Component {
     this.strip.insertBefore(link, this.strip.firstChild);
   };
 
+  handleHoverChange = show => {
+    this.setState({
+      hover: show
+    });
+  };
+
   render() {
+    const hoverContent = <div>Please Enable Your Webcam!</div>;
+
     return (
       <div>
         <header className="main">
@@ -191,18 +206,44 @@ class App extends Component {
           </nav>
         </header>
         <div className="content">
-          <div className="controller">
-            <Row className="row">
-              <Col span={24} gutter={16} className="col">
-                <Button onClick={this.paintToCanvas}>Matrixify</Button>
-              </Col>
-              <Col>
-                <Button onClick={this.takePhoto}>Take Photo</Button>
-              </Col>
-            </Row>
-          </div>
-          <canvas ref="canvas" width="640" height="480" className="canvas" />
-          <video ref="video" className="video" />
+          <Row style={{ height: "100%" }}>
+            <Col span={16}>
+              <canvas
+                ref="canvas"
+                width="640"
+                height="480"
+                className="canvas"
+              />
+            </Col>
+            <Col span={8} style={{ height: "100vh" }}>
+              <video ref="video" className="video" />
+              <div className="controller">
+                <Row className="row">
+                  <Col span={24} gutter={16} className="col">
+                    <Popover
+                      content={hoverContent}
+                      trigger="hover"
+                      placement="bottom"
+                      visible={!this.state.hover}
+                      onVisibleChange={
+                        this.state.video ? "" : this.handleHoverChange
+                      }
+                    >
+                      <Button
+                        onClick={this.state.video ? "" : this.paintToCanvas}
+                        disabled={!this.state.video}
+                      >
+                        Matrixify
+                      </Button>
+                    </Popover>
+                  </Col>
+                  <Col>
+                    <Button onClick={this.takePhoto}>Take Photo</Button>
+                  </Col>
+                </Row>
+              </div>
+            </Col>
+          </Row>
           <div ref="strip" className="strip" />
           <div className="footer" />
         </div>
