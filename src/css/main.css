@@ -2,12 +2,16 @@
   text-transform: uppercase;
   font-family: "brandon-grotesque", sans-serif;
   letter-spacing: 0.2em;
-  font-weight: 500; }
+  font-weight: 500;
+  color: green; }
+
+body {
+  background-color: #202020; }
 
 .main {
   width: 85%;
-  padding-top: 60px;
-  position: absolute;
+  padding-top: 40px;
+  position: relative;
   top: 0px;
   left: 0;
   right: 0;
@@ -36,11 +40,13 @@
         -moz-transition: all 0.2s ease-in-out;
         -o-transition: all 0.2s ease-in-out;
         transition: all 0.2s ease-in-out; }
+  .navbar .navicons {
+    font-size: 20px; }
 
 .content {
   width: 100%;
   height: auto;
-  background-color: #202020; }
+  position: relative; }
 
 .description {
   padding: 10px;
@@ -62,17 +68,17 @@
       height: 50%; }
 
 .canvas {
-  width: 90%;
+  width: 80%;
   margin-left: 10%;
-  margin-top: 20vh;
+  margin-top: 10vh;
   background-color: black;
   border-color: #151911;
   border-style: solid;
   border-width: 20px 40px 20px 40px;
   border-radius: 10px;
-  -webkit-box-shadow: 1px 2px 25px 10px rgba(0, 0, 0, 0.75);
-  -moz-box-shadow: 1px 2px 25px 10px rgba(0, 0, 0, 0.75);
-  box-shadow: 1px 2px 25px 10px rgba(0, 0, 0, 0.75); }
+  -webkit-box-shadow: 1px 1px 25px 10px rgba(0, 0, 0, 0.55);
+  -moz-box-shadow: 1px 1px 25px 10px rgba(0, 0, 0, 0.55);
+  box-shadow: 1px 1px 25px 10px rgba(0, 0, 0, 0.55); }
 
 .video {
   width: 280px;
@@ -86,14 +92,17 @@
   box-shadow: 1px 2px 50px 15px rgba(0, 0, 0, 0.75); }
 
 .strip {
-  height: 200px;
+  height: 300px;
   width: 100%;
-  margin: 20px; }
+  margin: 20px;
+  padding-bottom: 20px;
+  border-top: solid 5px black;
+  overflow: scroll; }
 
 .strip a img {
-  height: 90%;
+  height: 200px;
   width: auto;
-  margin: 10px; }
+  margin: 15px; }
 
 .footer {
-  height: 100px; }
+  margin-bottom: 30px; }

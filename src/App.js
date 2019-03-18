@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { Row, Col, Button, Popover } from "antd";
+import { Row, Col, Button, Popover, Icon } from "antd";
 import "antd/dist/antd.css";
 import "./css/main.css";
 
@@ -9,7 +9,7 @@ import Stream from "./components/stream";
 class App extends Component {
   state = {
     video: false,
-    hover: false 
+    hover: false
   };
 
   constructor(props) {
@@ -61,6 +61,7 @@ class App extends Component {
           video.srcObject = localMediaStream;
           video.play();
           this.setState({ video: true });
+          console.log(this.state.video);
         })
         .catch(err => {
           console.error("Please enable your webcam", err);
@@ -179,9 +180,13 @@ class App extends Component {
     link.setAttribute("download", "matrix");
     link.innerHTML = `<img src="${data1}"/>`;
     this.strip.insertBefore(link, this.strip.firstChild);
+    document.querySelector(".strip").scrollIntoView({
+      behavior: "smooth"
+    });
   };
 
-  handleHoverChange = show => {
+  handleVisibleChange = show => {
+    console.log("handleHoverChange");
     this.setState({
       hover: show
     });
@@ -197,10 +202,31 @@ class App extends Component {
           <nav className="navbar">
             <ul>
               <li>
-                <a href="">About</a>
+                <a
+                  href="https://github.com/SteveLeong"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  <Icon type="github" className="navicons" />
+                </a>
               </li>
               <li>
-                <a href="">Contact</a>
+                <a
+                  href="https://www.linkedin.com/in/steven-leong/"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  <Icon type="linkedin" className="navicons" />
+                </a>
+              </li>
+              <li>
+                <a
+                  href="https://steveleong.github.io/Portfolio/"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  <Icon type="folder-open" className="navicons" />
+                </a>
               </li>
             </ul>
           </nav>
@@ -215,27 +241,29 @@ class App extends Component {
                 className="canvas"
               />
             </Col>
-            <Col span={8} style={{ height: "100vh" }}>
+            <Col span={8} style={{ height: "80vh" }}>
               <video ref="video" className="video" />
               <div className="controller">
                 <Row className="row">
                   <Col span={24} gutter={16} className="col">
-                    <Popover
-                      content={hoverContent}
-                      trigger="hover"
-                      placement="bottom"
-                      visible={!this.state.hover}
-                      onVisibleChange={
-                        this.state.video ? "" : this.handleHoverChange
-                      }
-                    >
-                      <Button
-                        onClick={this.state.video ? "" : this.paintToCanvas}
-                        disabled={!this.state.video}
+                    <div>
+                      <Popover
+                        content={hoverContent}
+                        trigger="hover"
+                        placement="bottom"
+                        visible={this.state.hover}
+                        onVisibleChange={
+                          this.state.video ? "" : this.handleVisibleChange
+                        }
                       >
-                        Matrixify
-                      </Button>
-                    </Popover>
+                        <Button
+                          onClick={this.paintToCanvas}
+                          disabled={!this.state.video}
+                        >
+                          Matrixify
+                        </Button>
+                      </Popover>
+                    </div>
                   </Col>
                   <Col>
                     <Button onClick={this.takePhoto}>Take Photo</Button>
@@ -245,20 +273,22 @@ class App extends Component {
             </Col>
           </Row>
           <div ref="strip" className="strip" />
-          <div className="footer" />
+          <div className="footer">
+            <div className="description">
+              For my Final Net Art Project I decided to do an Interactive
+              Artwork inspired by the movie 'Matrix'. In the movie, there is a
+              scene where the main character sees 'code' in his vision,
+              overlayed on top of reality. I thought it would be cool to
+              recreate this effect using a webcam.
+              <br /> Originally this was done entirely in JavaScript, but I
+              decided to convert it to a React application.
+            </div>
+          </div>
         </div>
       </div>
     );
     {
-      /* <div className="description">
-          For my Final Project I decided to do an Interactive Artwork inspired
-          by the movie 'Matrix'. In the movie, there is a scene where the main
-          character sees 'code' in his vision, overlayed on top of reality. I
-          thought it would be cool to recreate this effect using a webcam.
-          <br />
-          <br />
-          Please Enable Your Webcam!
-        </div> */
+      /* 
     }
 
     {
