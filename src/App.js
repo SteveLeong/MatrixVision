@@ -1,10 +1,11 @@
 import React, { Component } from "react";
-import { Row, Col, Button, Popover, Icon } from "antd";
+import { Row, Col } from "antd";
 import "antd/dist/antd.css";
 import "./css/main.css";
 
-import Stream from "./components/stream";
-// import Column from "antd/lib/table/Column";
+import Stream from "./scripts/stream";
+import NavBar from "./components/navBar";
+import Controller from "./components/controller";
 
 class App extends Component {
   state = {
@@ -185,52 +186,10 @@ class App extends Component {
     });
   };
 
-  handleVisibleChange = show => {
-    console.log("handleHoverChange");
-    this.setState({
-      hover: show
-    });
-  };
-
   render() {
-    const hoverContent = <div>Please Enable Your Webcam!</div>;
-
     return (
       <div>
-        <header className="main">
-          <a href="App.js">MatrixVision</a>
-          <nav className="navbar">
-            <ul>
-              <li>
-                <a
-                  href="https://github.com/SteveLeong"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                >
-                  <Icon type="github" className="navicons" />
-                </a>
-              </li>
-              <li>
-                <a
-                  href="https://www.linkedin.com/in/steven-leong/"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                >
-                  <Icon type="linkedin" className="navicons" />
-                </a>
-              </li>
-              <li>
-                <a
-                  href="https://steveleong.github.io/Portfolio/"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                >
-                  <Icon type="folder-open" className="navicons" />
-                </a>
-              </li>
-            </ul>
-          </nav>
-        </header>
+        <NavBar />
         <div className="content">
           <Row style={{ height: "100%" }}>
             <Col span={16}>
@@ -243,33 +202,11 @@ class App extends Component {
             </Col>
             <Col span={8} style={{ height: "80vh" }}>
               <video ref="video" className="video" />
-              <div className="controller">
-                <Row className="row">
-                  <Col span={24} gutter={16} className="col">
-                    <div>
-                      <Popover
-                        content={hoverContent}
-                        trigger="hover"
-                        placement="bottom"
-                        visible={this.state.hover}
-                        onVisibleChange={
-                          this.state.video ? "" : this.handleVisibleChange
-                        }
-                      >
-                        <Button
-                          onClick={this.paintToCanvas}
-                          disabled={!this.state.video}
-                        >
-                          Matrixify
-                        </Button>
-                      </Popover>
-                    </div>
-                  </Col>
-                  <Col>
-                    <Button onClick={this.takePhoto}>Take Photo</Button>
-                  </Col>
-                </Row>
-              </div>
+              <Controller
+                paintToCanvas={this.paintToCanvas}
+                takePhoto={this.takePhoto}
+                video={this.state.video}
+              />
             </Col>
           </Row>
           <div ref="strip" className="strip" />
@@ -287,13 +224,8 @@ class App extends Component {
         </div>
       </div>
     );
-    {
-      /* 
-    }
 
-    {
-      /* <div>Make Sure Your Webcam is Enabled!</div> */
-    }
+    /* <div>Make Sure Your Webcam is Enabled!</div> */
   }
 }
 
