@@ -101,7 +101,7 @@ class App extends Component {
     }
 
     // Sort symbols by total values
-    this.symbolData.sort(function (a, b) {
+    this.symbolData.sort((a, b) => {
       return a[0] - b[0];
     });
 
@@ -133,8 +133,8 @@ class App extends Component {
   };
 
   matrixify = (canvas, ctx, symbols, size) => {
-    this.streams.forEach(function (stream) {
-      stream.symbols.forEach(function (symbol) {
+    this.streams.forEach((stream) => {
+      stream.symbols.forEach((symbol) => {
         var imgData = ctx.getImageData(symbol.x1, symbol.y1, 7, size);
         var brightness = symbol.getBrightness(imgData);
         var total = brightness[0] / brightness[1];

@@ -21,7 +21,7 @@ class Stream {
   }
 
   render(ctx, height) {
-    this.symbols.forEach(function(symbol) {
+    this.symbols.forEach((symbol) => {
       if (symbol.first) {
         ctx.fillStyle = "#09ff08";
       } else {
