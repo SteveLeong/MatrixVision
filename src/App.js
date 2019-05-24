@@ -29,15 +29,14 @@ class App extends Component {
 
   componentDidMount() {
     this.ctx = this.canvas.current.getContext("2d");
-    this.ctx.fillStyle = "black";
-    this.ctx.fillRect(0, 0, this.canvas.current.width, this.canvas.current.height);
+    this.clearCTX();
     this.setUp();
-    // console.log(this.ctx)
+    this.clearCTX();
+  }
+
+  clearCTX = () => {
     this.ctx.fillStyle = "black";
     this.ctx.fillRect(0, 0, this.canvas.current.width, this.canvas.current.height);
-    this.ctx.font = "11px monospace";
-    this.ctx.fillStyle = "#00BB00";
-    // console.log("p")
   }
 
   setUp = () => {
@@ -80,7 +79,6 @@ class App extends Component {
       this.ctx.fillText(symbol, xcoor, ycoor);
 
       // get the 'brightness' of the symbol, Black=000, so brightness is the amount of RGB in the symbol
-      // getImageData(x, y, width, height)
 
       var imgData = this.ctx.getImageData(
         xcoor,
@@ -126,20 +124,15 @@ class App extends Component {
       this.symbolData.length - 1
     ][1];
 
-    // this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
   };
 
   paintToCanvas = () => {
     this.ctx.drawImage(this.video.current, 0, 0);
-    this.matrixify();
+    this.matrixify(this.canvas, this.ctx, this.symbols, this.sfontSize);
     requestAnimationFrame(this.paintToCanvas);
   };
 
-  matrixify = () => {
-    var height = this.canvas.current.height;
-    var ctx = this.ctx;
-    var symbols = this.symbols;
-    var size = this.sfontSize;
+  matrixify = (canvas, ctx, symbols, size) => {
     this.streams.forEach(function (stream) {
       stream.symbols.forEach(function (symbol) {
         var imgData = ctx.getImageData(symbol.x1, symbol.y1, 7, size);
@@ -151,23 +144,10 @@ class App extends Component {
       });
     });
 
-    ctx.clearRect(0, 0, this.canvas.current.width, height);
+    ctx.clearRect(0, 0, canvas.current.width, canvas.current.height);
 
     this.streams.forEach(function (stream) {
-      stream.render(ctx, height);
-    });
-  };
-
-  takePhoto = () => {
-    const data1 = this.canvas.current.toDataURL("image/jpeg");
-    console.log(data1);
-    var link = document.createElement("a");
-    link.href = data1;
-    link.setAttribute("download", "matrix");
-    link.innerHTML = `<img src="${data1}"/>`;
-    this.strip.insertBefore(link, this.strip.firstChild);
-    document.querySelector(".strip").scrollIntoView({
-      behavior: "smooth"
+      stream.render(ctx, canvas.current.height);
     });
   };
 

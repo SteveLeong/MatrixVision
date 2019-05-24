@@ -58,18 +58,16 @@ const Controller = React.forwardRef((props, ref) => {
               trigger="hover"
               placement="bottom"
               visible={hover}
-              // onVisibleChange={props.video ? "" : handleVisibleChange}
               onVisibleChange={hasVideo ? "" : handleVisibleChange}
             >
               <Button onClick={props.paintToCanvas} disabled={!hasVideo}>
-                {/* <Button onClick={props.paintToCanvas} disabled={!props.video}> */}
                 Matrixify
               </Button>
             </Popover>
           </div>
         </Col>
         <Col span={24} gutter={16} className="col">
-          <Button onClick={takePhoto}>Take Photo</Button>
+          <Button onClick={takePhoto} disabled={!hasVideo}>Take Photo</Button>
         </Col>
       </Row>
     </div>
