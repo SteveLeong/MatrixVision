@@ -6,11 +6,12 @@ import "./css/main.css";
 import Stream from "./scripts/stream";
 import NavBar from "./components/navBar";
 import Controller from "./components/controller";
+import Video from "./components/video"
+import Canvas from "./components/canvas"
 
 class App extends Component {
   state = {
-    video: false,
-    hover: false
+    video: false
   };
 
   constructor(props) {
@@ -18,30 +19,33 @@ class App extends Component {
 
     this.sfontSize = 11;
     this.symbols = new Array(25);
-    this.symbolData = []; // All 96 Katakana symbols and theyre respective RGB totals
+    this.symbolData = []; // All 96 Katakana symbols and their respective RGB totals
     this.streams = [];
+    this.video = React.createRef()
+    this.strip = React.createRef()
+    this.canvas = React.createRef()
+    this.photoRefs = [this.canvas, this.strip]
   }
 
   componentDidMount() {
-    this.video = this.refs.video;
-    this.canvas = this.refs.canvas;
-    this.strip = this.refs.strip;
-    this.ctx = this.canvas.getContext("2d");
+    this.ctx = this.canvas.current.getContext("2d");
     this.ctx.fillStyle = "black";
-    this.ctx.fillRect(0, 0, this.canvas.width, this.canvas.height);
+    this.ctx.fillRect(0, 0, this.canvas.current.width, this.canvas.current.height);
     this.setUp();
+    console.log(this.ctx)
     this.ctx.fillStyle = "black";
-    this.ctx.fillRect(0, 0, this.canvas.width, this.canvas.height);
+    this.ctx.fillRect(0, 0, this.canvas.current.width, this.canvas.current.height);
     this.ctx.font = "11px monospace";
     this.ctx.fillStyle = "#00BB00";
+    console.log("p")
   }
 
   setUp = () => {
-    this.setUpVideo(this.video);
+    this.setUpVideo(this.video.current);
     this.getSymbols();
     var x = 0;
-    for (var i = 0; i <= this.canvas.width / this.sfontSize; i++) {
-      var stream = new Stream(this.canvas.height, this.sfontSize);
+    for (var i = 0; i <= this.canvas.current.width / this.sfontSize; i++) {
+      var stream = new Stream(this.canvas.current.height, this.sfontSize);
       stream.generateSymbols(
         x,
         Math.random() - 500,
@@ -85,7 +89,7 @@ class App extends Component {
       symbol = String.fromCharCode(0x30a0 + i);
 
       // if its trying to print off the canvas
-      if (count * 12 + 20 > this.canvas.width) {
+      if (count * 12 + 20 > this.canvas.current.width) {
         count = 0;
         ycoor += 10;
       }
@@ -118,7 +122,7 @@ class App extends Component {
     }
 
     // Sort symbols by total values
-    this.symbolData.sort(function(a, b) {
+    this.symbolData.sort(function (a, b) {
       return a[0] - b[0];
     });
 
@@ -145,18 +149,18 @@ class App extends Component {
   };
 
   paintToCanvas = () => {
-    this.ctx.drawImage(this.video, 0, 0);
+    this.ctx.drawImage(this.video.current, 0, 0);
     this.matrixify();
     requestAnimationFrame(this.paintToCanvas);
   };
 
   matrixify = () => {
-    var height = this.canvas.height;
+    var height = this.canvas.current.height;
     var ctx = this.ctx;
     var symbols = this.symbols;
     var size = this.sfontSize;
-    this.streams.forEach(function(stream) {
-      stream.symbols.forEach(function(symbol) {
+    this.streams.forEach(function (stream) {
+      stream.symbols.forEach(function (symbol) {
         var imgData = ctx.getImageData(symbol.x1, symbol.y1, 7, size);
         var brightness = symbol.getBrightness(imgData);
         var total = brightness[0] / brightness[1];
@@ -166,15 +170,15 @@ class App extends Component {
       });
     });
 
-    ctx.clearRect(0, 0, this.canvas.width, height);
+    ctx.clearRect(0, 0, this.canvas.current.width, height);
 
-    this.streams.forEach(function(stream) {
+    this.streams.forEach(function (stream) {
       stream.render(ctx, height);
     });
   };
 
   takePhoto = () => {
-    const data1 = this.canvas.toDataURL("image/jpeg");
+    const data1 = this.canvas.current.toDataURL("image/jpeg");
     console.log(data1);
     var link = document.createElement("a");
     link.href = data1;
@@ -193,23 +197,25 @@ class App extends Component {
         <div className="content">
           <Row style={{ height: "100%" }}>
             <Col span={16}>
-              <canvas
-                ref="canvas"
-                width="640"
-                height="480"
-                className="canvas"
-              />
+              <Canvas ref={this.canvas} />
             </Col>
             <Col span={8} style={{ height: "80vh" }}>
-              <video ref="video" className="video" />
-              <Controller
+              {/* <video ref={this.video} className="video" /> */}
+              <Video ref={this.video} />
+              {/* <Controller
                 paintToCanvas={this.paintToCanvas}
                 takePhoto={this.takePhoto}
                 video={this.state.video}
+              /> */}
+              <Controller
+                paintToCanvas={this.paintToCanvas}
+                sfontSize={this.sfontSize}
+                video={this.state.video}
+                ref={this.photoRefs}
               />
             </Col>
           </Row>
-          <div ref="strip" className="strip" />
+          <div ref={this.strip} className="strip" />
           <div className="footer">
             <div className="description">
               For my Final Net Art Project I decided to do an Interactive
