@@ -24,7 +24,7 @@ class App extends Component {
     this.video = React.createRef()
     this.strip = React.createRef()
     this.canvas = React.createRef()
-    this.photoRefs = [this.canvas, this.strip]
+    this.controllerRefs = [this.canvas, this.strip, this.video]
   }
 
   componentDidMount() {
@@ -32,16 +32,15 @@ class App extends Component {
     this.ctx.fillStyle = "black";
     this.ctx.fillRect(0, 0, this.canvas.current.width, this.canvas.current.height);
     this.setUp();
-    console.log(this.ctx)
+    // console.log(this.ctx)
     this.ctx.fillStyle = "black";
     this.ctx.fillRect(0, 0, this.canvas.current.width, this.canvas.current.height);
     this.ctx.font = "11px monospace";
     this.ctx.fillStyle = "#00BB00";
-    console.log("p")
+    // console.log("p")
   }
 
   setUp = () => {
-    this.setUpVideo(this.video.current);
     this.getSymbols();
     var x = 0;
     for (var i = 0; i <= this.canvas.current.width / this.sfontSize; i++) {
@@ -54,24 +53,6 @@ class App extends Component {
       );
       this.streams.push(stream);
       x += this.sfontSize;
-    }
-  };
-
-  setUpVideo = video => {
-    if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
-      navigator.mediaDevices
-        .getUserMedia({ video: true, audio: false })
-        .then(localMediaStream => {
-          console.log(localMediaStream);
-          video.srcObject = localMediaStream;
-          video.play();
-          this.setState({ video: true });
-          console.log(this.state.video);
-        })
-        .catch(err => {
-          console.error("Please enable your webcam", err);
-          console.log(this.state.video);
-        });
     }
   };
 
@@ -200,18 +181,11 @@ class App extends Component {
               <Canvas ref={this.canvas} />
             </Col>
             <Col span={8} style={{ height: "80vh" }}>
-              {/* <video ref={this.video} className="video" /> */}
               <Video ref={this.video} />
-              {/* <Controller
-                paintToCanvas={this.paintToCanvas}
-                takePhoto={this.takePhoto}
-                video={this.state.video}
-              /> */}
               <Controller
                 paintToCanvas={this.paintToCanvas}
                 sfontSize={this.sfontSize}
-                video={this.state.video}
-                ref={this.photoRefs}
+                ref={this.controllerRefs}
               />
             </Col>
           </Row>

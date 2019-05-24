@@ -1,13 +1,33 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Row, Col, Popover, Button } from "antd";
 
 const Controller = React.forwardRef((props, ref) => {
   const hoverContent = <div>Please Enable Your Webcam!</div>;
 
-  const [canvasRef, stripRef] = ref
+  const [canvasRef, stripRef, videoRef] = ref
 
   const [hover, setHover] = useState(false);
-  //   const [video, setVideo] = useState(false);
+  const [hasVideo, setHasVideo] = useState(false)
+
+  useEffect(() => {
+    if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
+      navigator.mediaDevices
+        .getUserMedia({ video: true, audio: false })
+        .then(localMediaStream => {
+          console.log(localMediaStream);
+          videoRef.current.srcObject = localMediaStream;
+          videoRef.current.play();
+          setHasVideo(true);
+        })
+        .catch(err => {
+          console.error("Please enable your webcam", err);
+          setHasVideo(false)
+        });
+    } else {
+      console.error("Please enable your webcam");
+    }
+  }, [])
+
 
   const takePhoto = () => {
     const data1 = canvasRef.current.toDataURL("image/jpeg");
@@ -38,9 +58,11 @@ const Controller = React.forwardRef((props, ref) => {
               trigger="hover"
               placement="bottom"
               visible={hover}
-              onVisibleChange={props.video ? "" : handleVisibleChange}
+              // onVisibleChange={props.video ? "" : handleVisibleChange}
+              onVisibleChange={hasVideo ? "" : handleVisibleChange}
             >
-              <Button onClick={props.paintToCanvas} disabled={!props.video}>
+              <Button onClick={props.paintToCanvas} disabled={!hasVideo}>
+                {/* <Button onClick={props.paintToCanvas} disabled={!props.video}> */}
                 Matrixify
               </Button>
             </Popover>
