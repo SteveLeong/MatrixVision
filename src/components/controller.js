@@ -3,8 +3,9 @@ import { Row, Col, Popover, Button } from "antd";
 
 import { useVideo } from "../hooks/videoHook"
 
+var scrollOnce = true
 var isPaused = false
-var rec
+var rec // init the recorder
 
 const Controller = React.forwardRef((props, ref) => {
 
@@ -85,9 +86,12 @@ const Controller = React.forwardRef((props, ref) => {
     link.innerHTML = `<img src="${data1}"/>`;
     stripRef.current.insertBefore(link, stripRef.current.firstChild);
 
-    document.querySelector(".strip").scrollIntoView({
-      behavior: "smooth"
-    });
+    if (scrollOnce) {
+      document.querySelector(".strip").scrollIntoView({
+        behavior: "smooth"
+      });
+      scrollOnce = false
+    }
 
   };
 
