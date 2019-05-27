@@ -13,13 +13,14 @@ const Controller = React.forwardRef((props, ref) => {
   const hasVideo = useVideo(videoRef)
 
 
+
   const paintToCanvas = () => {
 
     if (!inMatrix) {
       let ctx = canvasRef.current.getContext("2d");
       ctx.drawImage(videoRef.current, 0, 0);
       matrixify(ctx);
-      setInMatrix(true)
+      setInMatrix(true) // sets state every time frame is changed
       requestAnimationFrame(paintToCanvas);
     } else {
       console.log("You're already in the Matrix")
