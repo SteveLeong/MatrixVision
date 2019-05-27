@@ -29,14 +29,7 @@ class App extends Component {
 
   componentDidMount() {
     this.ctx = this.canvas.current.getContext("2d");
-    this.clearCTX();
     setUp(this.canvas, this.ctx, this.sfontSize, this.symbols, this.symbolData, this.streams)
-    this.clearCTX();
-  }
-
-  clearCTX = () => {
-    this.ctx.fillStyle = "black";
-    this.ctx.fillRect(0, 0, this.canvas.current.width, this.canvas.current.height);
   }
 
   paintToCanvas = () => {
