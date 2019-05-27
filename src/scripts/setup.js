@@ -1,6 +1,7 @@
 import Stream from "./stream"
 
 export const setUp = (canvas, ctx, sfontSize, symbols, symbolData, streams) => {
+
     clearCTX(canvas, ctx)
     getSymbols(canvas, ctx, sfontSize, symbolData, symbols);
     clearCTX(canvas, ctx)
@@ -16,14 +17,18 @@ export const setUp = (canvas, ctx, sfontSize, symbols, symbolData, streams) => {
         streams.push(stream);
         x += sfontSize;
     }
+
 };
 
 const clearCTX = (canvas, ctx) => {
+
     ctx.fillStyle = "black";
     ctx.fillRect(0, 0, canvas.current.width, canvas.current.height);
+
 }
 
 const getSymbols = (canvas, ctx, sfontSize, symbolData, symbols) => {
+
     ctx.font = "11px monospace";
     ctx.fillStyle = "#00BB00";
     // Get Katakana symbols

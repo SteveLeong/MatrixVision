@@ -10,11 +10,9 @@ import Canvas from "./components/canvas"
 import { setUp } from "./scripts/setup"
 
 class App extends Component {
-  state = {
-    video: false
-  };
 
   constructor(props) {
+
     super(props);
 
     this.sfontSize = 11;
@@ -25,15 +23,19 @@ class App extends Component {
     this.strip = React.createRef()
     this.canvas = React.createRef()
     this.controllerRefs = [this.canvas, this.strip, this.video] // can't send multiple refs to one component
+
   }
 
   componentDidMount() {
+
     this.ctx = this.canvas.current.getContext("2d");
     setUp(this.canvas, this.ctx, this.sfontSize, this.symbols, this.symbolData, this.streams)
+
   }
 
 
   render() {
+
     return (
       <div>
         <NavBar />
@@ -68,7 +70,6 @@ class App extends Component {
       </div>
     );
 
-    /* <div>Make Sure Your Webcam is Enabled!</div> */
   }
 }
 

@@ -9,6 +9,7 @@ const Controller = React.forwardRef((props, ref) => {
   const [hasVideo, setHasVideo] = useState(false)
 
   useEffect(() => {
+
     // console.log("using controller")
     if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
       navigator.mediaDevices
@@ -26,18 +27,22 @@ const Controller = React.forwardRef((props, ref) => {
     } else {
       console.error("Please enable your webcam");
     }
+
   }, [])
 
 
   const paintToCanvas = () => {
+
     let ctx = canvasRef.current.getContext("2d");
     ctx.drawImage(videoRef.current, 0, 0);
     matrixify(ctx);
     requestAnimationFrame(paintToCanvas);
+
   };
 
 
   const matrixify = (ctx) => {
+
     props.streams.forEach((stream) => {
       stream.symbols.forEach((symbol) => {
         var imgData = ctx.getImageData(symbol.x1, symbol.y1, 7, props.fontSize);
@@ -54,13 +59,14 @@ const Controller = React.forwardRef((props, ref) => {
     props.streams.forEach(function (stream) {
       stream.render(ctx, canvasRef.current.height);
     });
+
   };
 
 
   const takePhoto = () => {
-    console.log(canvasRef.current)
+
     const data1 = canvasRef.current.toDataURL("image/jpeg");
-    console.log(data1);
+    // console.log(data1);
     var link = document.createElement("a");
     link.href = data1;
     link.setAttribute("download", "matrix");
@@ -69,13 +75,16 @@ const Controller = React.forwardRef((props, ref) => {
     document.querySelector(".strip").scrollIntoView({
       behavior: "smooth"
     });
+
   };
 
 
   const handleVisibleChange = show => {
-    console.log("handleHoverChange");
+
     setHover(show);
+
   };
+
 
   return (
     <div className="controller">
