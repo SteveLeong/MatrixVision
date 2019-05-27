@@ -1,7 +1,9 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import { Row, Col, Popover, Button } from "antd";
 
 import { useVideo } from "../hooks/videoHook"
+
+var isPaused = false
 
 const Controller = React.forwardRef((props, ref) => {
 
@@ -9,23 +11,31 @@ const Controller = React.forwardRef((props, ref) => {
   const [canvasRef, stripRef, videoRef] = ref
 
   const [hover, setHover] = useState(false);
-  const [inMatrix, setInMatrix] = useState(false)
-  const hasVideo = useVideo(videoRef)
+  const [inMatrix, setInMatrix] = useState(false);
+  const [btnText, setBtnText] = useState("Matrixify")
+
+
+  const hasVideo = useVideo(videoRef);
 
   const checkMatrixState = () => {
     if (!inMatrix) {
       setInMatrix(true)
       paintToCanvas()
+      setBtnText("Pause")
     } else {
-      console.log("You're already in the Matrix")
+      // console.log("You're already in the Matrix")
+      isPaused = !isPaused
     }
   }
 
   const paintToCanvas = () => {
 
-    let ctx = canvasRef.current.getContext("2d");
-    ctx.drawImage(videoRef.current, 0, 0);
-    matrixify(ctx);
+    if (!isPaused) {
+      let ctx = canvasRef.current.getContext("2d");
+      ctx.drawImage(videoRef.current, 0, 0);
+      matrixify(ctx);
+    }
+
     requestAnimationFrame(paintToCanvas);
 
   };
@@ -84,8 +94,8 @@ const Controller = React.forwardRef((props, ref) => {
               visible={hover}
               onVisibleChange={hasVideo ? "" : handleVisibleChange}
             >
-              <Button onClick={checkMatrixState} disabled={!hasVideo}>
-                Matrixify
+              <Button onClick={checkMatrixState} disabled={!hasVideo} id="matrixBtn">
+                {btnText}
               </Button>
             </Popover>
           </div>
