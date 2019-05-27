@@ -1,34 +1,15 @@
 import React, { useState, useEffect } from "react";
 import { Row, Col, Popover, Button } from "antd";
 
+import { useVideo } from "../hooks/videoHook"
+
 const Controller = React.forwardRef((props, ref) => {
 
   const hoverContent = <div>Please Enable Your Webcam!</div>;
   const [canvasRef, stripRef, videoRef] = ref
+
   const [hover, setHover] = useState(false);
-  const [hasVideo, setHasVideo] = useState(false)
-
-  useEffect(() => {
-
-    // console.log("using controller")
-    if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
-      navigator.mediaDevices
-        .getUserMedia({ video: true, audio: false })
-        .then(localMediaStream => {
-          console.log(localMediaStream);
-          videoRef.current.srcObject = localMediaStream;
-          videoRef.current.play();
-          setHasVideo(true);
-        })
-        .catch(err => {
-          console.error("Please enable your webcam", err);
-          setHasVideo(false)
-        });
-    } else {
-      console.error("Please enable your webcam");
-    }
-
-  }, [])
+  const hasVideo = useVideo(videoRef)
 
 
   const paintToCanvas = () => {
@@ -79,11 +60,7 @@ const Controller = React.forwardRef((props, ref) => {
   };
 
 
-  const handleVisibleChange = show => {
-
-    setHover(show);
-
-  };
+  const handleVisibleChange = show => { setHover(show); };
 
 
   return (

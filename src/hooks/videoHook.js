@@ -6,26 +6,25 @@ export const useVideo = videoRef => {
 
     useEffect(() => {
 
+        // console.log("using controller")
         if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
             navigator.mediaDevices
                 .getUserMedia({ video: true, audio: false })
                 .then(localMediaStream => {
                     console.log(localMediaStream);
-                    videoRef.srcObject = localMediaStream;
-                    videoRef.play();
-                    setHasVideo(true)
-                    console.log(hasVideo);
+                    videoRef.current.srcObject = localMediaStream;
+                    videoRef.current.play();
+                    setHasVideo(true);
                 })
                 .catch(err => {
                     console.error("Please enable your webcam", err);
-                    // setHasVideo(false)
-                    console.log(hasVideo);
+                    setHasVideo(false)
                 });
+        } else {
+            console.error("Please enable your webcam");
         }
 
     }, [])
 
     return hasVideo
 }
-
-// export default useVideo
