@@ -4,6 +4,7 @@ import { Row, Col, Popover, Button } from "antd";
 import { useVideo } from "../hooks/videoHook"
 
 var isPaused = false
+var rec
 
 const Controller = React.forwardRef((props, ref) => {
 
@@ -13,6 +14,8 @@ const Controller = React.forwardRef((props, ref) => {
   const [hover, setHover] = useState(false);
   const [inMatrix, setInMatrix] = useState(false);
   const [btnText, setBtnText] = useState("Matrixify")
+  const [takeVidText, setTakeVidText] = useState("Take Video")
+  const [takingVideo, setTakingVideo] = useState(false)
 
 
   const hasVideo = useVideo(videoRef);
@@ -78,14 +81,54 @@ const Controller = React.forwardRef((props, ref) => {
 
   };
 
+  const takeVideo = () => {
+
+    if (!takingVideo) {
+      const chunks = []; // here we will store our recorded media chunks (Blobs)
+      const stream = canvasRef.current.captureStream(); // grab our canvas MediaStream
+      rec = new MediaRecorder(stream); // init the recorder
+      setTakingVideo(true)
+      setTakeVidText("Stop")
+
+      // every time the recorder has new data, we will store it in our array
+      rec.ondataavailable = e => chunks.push(e.data);
+      // only when the recorder stops, we construct a complete Blob from all the chunks
+      rec.onstop = e => exportVid(new Blob(chunks, { type: 'video/webm' }));
+
+      rec.start();
+
+    } else {
+      setTakingVideo(false)
+      rec.stop()
+      setTakeVidText("Take Video")
+    }
+  }
+
+  const exportVid = (blob) => {
+    const myDiv = document.createElement('div')
+    myDiv.className = "videoDiv"
+    stripRef.current.insertBefore(myDiv, stripRef.current.firstChild);
+    const vid = document.createElement('video');
+    vid.src = URL.createObjectURL(blob);
+    vid.controls = true;
+    myDiv.appendChild(vid)
+    // stripRef.current.insertBefore(vid, stripRef.current.firstChild);
+    const a = document.createElement('a');
+    a.download = 'myvid.webm';
+    a.href = vid.src;
+    a.textContent = 'download the video';
+    myDiv.appendChild(a)
+    // stripRef.current.insertBefore(a, stripRef.current.firstChild);
+  }
+
 
   const handleVisibleChange = show => { setHover(show); };
 
 
   return (
     <div className="controller">
-      <Row className="row">
-        <Col span={24} gutter={16} className="col">
+      <Row gutter={16} className="row">
+        <Col span={24} className="col">
           <div>
             <Popover
               content={hoverContent}
@@ -100,8 +143,12 @@ const Controller = React.forwardRef((props, ref) => {
             </Popover>
           </div>
         </Col>
-        <Col span={24} gutter={16} className="col">
+        <Col span={24} className="col">
           <Button onClick={takePhoto} disabled={!hasVideo}>Take Photo</Button>
+
+        </Col>
+        <Col span={24} className="col">
+          <Button onClick={takeVideo} disabled={!hasVideo}>{takeVidText}</Button>
         </Col>
       </Row>
     </div>

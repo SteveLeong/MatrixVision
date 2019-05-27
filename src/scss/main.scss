@@ -70,7 +70,7 @@ body {
 .controller {
   text-align: center;
   float: right;
-  top: 60vh;
+  top: 50vh;
   right: 5vw;
   position: relative;
   height: 10em;
@@ -120,6 +120,18 @@ body {
   padding-bottom: 20px;
   border-top: solid 5px black;
   overflow: scroll;
+  .videoDiv {
+
+    video {
+      height: 100%;
+      width: auto;
+    }
+    a {
+      width: 100%;
+    }
+    width: 300px;
+    height: 250px
+  }
 }
 
 .strip a img {

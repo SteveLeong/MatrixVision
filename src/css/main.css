@@ -55,7 +55,7 @@ body {
 .controller {
   text-align: center;
   float: right;
-  top: 60vh;
+  top: 50vh;
   right: 5vw;
   position: relative;
   height: 10em;
@@ -98,6 +98,14 @@ body {
   padding-bottom: 20px;
   border-top: solid 5px black;
   overflow: scroll; }
+  .strip .videoDiv {
+    width: 300px;
+    height: 250px; }
+    .strip .videoDiv video {
+      height: 100%;
+      width: auto; }
+    .strip .videoDiv a {
+      width: 100%; }
 
 .strip a img {
   height: 200px;
