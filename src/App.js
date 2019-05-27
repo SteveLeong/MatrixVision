@@ -24,7 +24,7 @@ class App extends Component {
     this.video = React.createRef()
     this.strip = React.createRef()
     this.canvas = React.createRef()
-    this.controllerRefs = [this.canvas, this.strip, this.video]
+    this.controllerRefs = [this.canvas, this.strip, this.video] // can't send multiple refs to one component
   }
 
   componentDidMount() {
@@ -32,30 +32,6 @@ class App extends Component {
     setUp(this.canvas, this.ctx, this.sfontSize, this.symbols, this.symbolData, this.streams)
   }
 
-  paintToCanvas = () => {
-    this.ctx.drawImage(this.video.current, 0, 0);
-    this.matrixify(this.canvas, this.ctx, this.symbols, this.sfontSize);
-    requestAnimationFrame(this.paintToCanvas);
-  };
-
-  matrixify = (canvas, ctx, symbols, size) => {
-    this.streams.forEach((stream) => {
-      stream.symbols.forEach((symbol) => {
-        var imgData = ctx.getImageData(symbol.x1, symbol.y1, 7, size);
-        var brightness = symbol.getBrightness(imgData);
-        var total = brightness[0] / brightness[1];
-
-        symbol.average = Math.ceil(total / stream.symbols.length);
-        symbol.setToVideoSymbol(symbols);
-      });
-    });
-
-    ctx.clearRect(0, 0, canvas.current.width, canvas.current.height);
-
-    this.streams.forEach(function (stream) {
-      stream.render(ctx, canvas.current.height);
-    });
-  };
 
   render() {
     return (
@@ -69,8 +45,9 @@ class App extends Component {
             <Col span={8} style={{ height: "80vh" }}>
               <Video ref={this.video} />
               <Controller
-                paintToCanvas={this.paintToCanvas}
-                sfontSize={this.sfontSize}
+                symbols={this.symbols}
+                fontSize={this.sfontSize}
+                streams={this.streams}
                 ref={this.controllerRefs}
               />
             </Col>

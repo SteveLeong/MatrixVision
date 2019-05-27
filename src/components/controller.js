@@ -2,14 +2,14 @@ import React, { useState, useEffect } from "react";
 import { Row, Col, Popover, Button } from "antd";
 
 const Controller = React.forwardRef((props, ref) => {
+
   const hoverContent = <div>Please Enable Your Webcam!</div>;
-
   const [canvasRef, stripRef, videoRef] = ref
-
   const [hover, setHover] = useState(false);
   const [hasVideo, setHasVideo] = useState(false)
 
   useEffect(() => {
+    // console.log("using controller")
     if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
       navigator.mediaDevices
         .getUserMedia({ video: true, audio: false })
@@ -29,7 +29,36 @@ const Controller = React.forwardRef((props, ref) => {
   }, [])
 
 
+  const paintToCanvas = () => {
+    let ctx = canvasRef.current.getContext("2d");
+    ctx.drawImage(videoRef.current, 0, 0);
+    matrixify(ctx);
+    requestAnimationFrame(paintToCanvas);
+  };
+
+
+  const matrixify = (ctx) => {
+    props.streams.forEach((stream) => {
+      stream.symbols.forEach((symbol) => {
+        var imgData = ctx.getImageData(symbol.x1, symbol.y1, 7, props.fontSize);
+        var brightness = symbol.getBrightness(imgData);
+        var total = brightness[0] / brightness[1];
+
+        symbol.average = Math.ceil(total / stream.symbols.length);
+        symbol.setToVideoSymbol(props.symbols);
+      });
+    });
+
+    ctx.clearRect(0, 0, canvasRef.current.width, canvasRef.current.height);
+
+    props.streams.forEach(function (stream) {
+      stream.render(ctx, canvasRef.current.height);
+    });
+  };
+
+
   const takePhoto = () => {
+    console.log(canvasRef.current)
     const data1 = canvasRef.current.toDataURL("image/jpeg");
     console.log(data1);
     var link = document.createElement("a");
@@ -60,7 +89,7 @@ const Controller = React.forwardRef((props, ref) => {
               visible={hover}
               onVisibleChange={hasVideo ? "" : handleVisibleChange}
             >
-              <Button onClick={props.paintToCanvas} disabled={!hasVideo}>
+              <Button onClick={paintToCanvas} disabled={!hasVideo}>
                 Matrixify
               </Button>
             </Popover>
