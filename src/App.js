@@ -3,11 +3,11 @@ import { Row, Col } from "antd";
 import "antd/dist/antd.css";
 import "./css/main.css";
 
-import Stream from "./scripts/stream";
 import NavBar from "./components/navBar";
 import Controller from "./components/controller";
 import Video from "./components/video"
 import Canvas from "./components/canvas"
+import { setUp } from "./scripts/setup"
 
 class App extends Component {
   state = {
@@ -30,7 +30,7 @@ class App extends Component {
   componentDidMount() {
     this.ctx = this.canvas.current.getContext("2d");
     this.clearCTX();
-    this.setUp();
+    setUp(this.canvas, this.ctx, this.sfontSize, this.symbols, this.symbolData, this.streams)
     this.clearCTX();
   }
 
@@ -38,93 +38,6 @@ class App extends Component {
     this.ctx.fillStyle = "black";
     this.ctx.fillRect(0, 0, this.canvas.current.width, this.canvas.current.height);
   }
-
-  setUp = () => {
-    this.getSymbols();
-    var x = 0;
-    for (var i = 0; i <= this.canvas.current.width / this.sfontSize; i++) {
-      var stream = new Stream(this.canvas.current.height, this.sfontSize);
-      stream.generateSymbols(
-        x,
-        Math.random() - 500,
-        this.sfontSize,
-        this.symbolData
-      );
-      this.streams.push(stream);
-      x += this.sfontSize;
-    }
-  };
-
-  getSymbols = () => {
-    this.ctx.font = "11px monospace";
-    this.ctx.fillStyle = "#00BB00";
-    // Get Katakana symbols
-    var xcoor = 0;
-    var count = 0;
-    var ycoor = 10;
-    var symbol;
-
-    for (var i = 0; i < 96; i++) {
-      // get symbol, 0x30A0 is where Katakana starts
-      symbol = String.fromCharCode(0x30a0 + i);
-
-      // if its trying to print off the canvas
-      if (count * 12 + 20 > this.canvas.current.width) {
-        count = 0;
-        ycoor += 10;
-      }
-
-      xcoor = count * 12 + 20;
-
-      this.ctx.fillText(symbol, xcoor, ycoor);
-
-      // get the 'brightness' of the symbol, Black=000, so brightness is the amount of RGB in the symbol
-
-      var imgData = this.ctx.getImageData(
-        xcoor,
-        ycoor - 10,
-        7,
-        this.sfontSize - 1
-      );
-
-      // total is the total RGB value of the symbol
-      var total = 0; //reset
-      for (var j = 0; j < imgData.data.length; j += 4) {
-        total += imgData.data[j] + imgData.data[j + 1] + imgData.data[j + 2];
-      }
-
-      var arr = new Array(2);
-      arr[0] = total;
-      arr[1] = symbol;
-      this.symbolData.push(arr);
-      count++;
-    }
-
-    // Sort symbols by total values
-    this.symbolData.sort((a, b) => {
-      return a[0] - b[0];
-    });
-
-    // Take 25 symbols
-    var interval = Math.floor(this.symbolData.length / this.symbols.length);
-    var index = 0;
-    for (
-      var k = 0;
-      k < this.symbols.length - 1 && index < this.symbolData.length;
-      k++
-    ) {
-      this.symbols[k] = this.symbolData[index][1];
-      // draw them onto empty canvas
-      this.ctx.fillText(this.symbols[k], k * 10 + 20, 90);
-      index += interval;
-    }
-
-    // Last symbol is always has biggest total RGB
-    this.symbols[this.symbols.length - 1] = this.symbolData[
-      this.symbolData.length - 1
-    ][1];
-
-  };
 
   paintToCanvas = () => {
     this.ctx.drawImage(this.video.current, 0, 0);
