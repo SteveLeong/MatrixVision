@@ -21,8 +21,9 @@ class App extends Component {
     this.streams = [];
     this.video = React.createRef()
     this.strip = React.createRef()
+    this.videoStrip = React.createRef()
     this.canvas = React.createRef()
-    this.controllerRefs = [this.canvas, this.strip, this.video] // can't send multiple refs to one component
+    this.controllerRefs = [this.canvas, this.strip, this.videoStrip, this.video] // can't send multiple refs to one component
 
   }
 
@@ -55,6 +56,7 @@ class App extends Component {
             </Col>
           </Row>
           <div ref={this.strip} className="strip" />
+          <div ref={this.videoStrip} className="videoStrip" />
           <div className="footer">
             <div className="description">
               For my Final Net Art Project I decided to do an Interactive

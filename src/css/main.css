@@ -92,25 +92,36 @@ body {
   box-shadow: 1px 2px 50px 15px rgba(0, 0, 0, 0.75); }
 
 .strip {
-  height: 300px;
+  height: auto;
+  min-height: 200px;
+  max-height: 300px;
   width: 100%;
   margin: 20px;
   padding-bottom: 20px;
   border-top: solid 5px black;
   overflow: scroll; }
-  .strip .videoDiv {
-    width: 300px;
-    height: 250px; }
-    .strip .videoDiv video {
-      height: 100%;
-      width: auto; }
-    .strip .videoDiv a {
-      width: 100%; }
+  .strip .videoLink {
+    height: 200px; }
 
 .strip a img {
   height: 200px;
   width: auto;
   margin: 15px; }
+
+.videoStrip {
+  height: auto;
+  min-height: 200px;
+  max-height: 300px;
+  width: 100%;
+  margin: 20px;
+  padding-bottom: 20px;
+  border-top: solid 5px black;
+  overflow: scroll; }
+  .videoStrip .videoLink {
+    height: 200px; }
+  .videoStrip a video {
+    height: 200px;
+    margin: 15px; }
 
 .footer {
   margin-bottom: 30px; }
