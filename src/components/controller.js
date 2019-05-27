@@ -9,15 +9,21 @@ const Controller = React.forwardRef((props, ref) => {
   const [canvasRef, stripRef, videoRef] = ref
 
   const [hover, setHover] = useState(false);
+  const [inMatrix, setInMatrix] = useState(false)
   const hasVideo = useVideo(videoRef)
 
 
   const paintToCanvas = () => {
 
-    let ctx = canvasRef.current.getContext("2d");
-    ctx.drawImage(videoRef.current, 0, 0);
-    matrixify(ctx);
-    requestAnimationFrame(paintToCanvas);
+    if (!inMatrix) {
+      let ctx = canvasRef.current.getContext("2d");
+      ctx.drawImage(videoRef.current, 0, 0);
+      matrixify(ctx);
+      setInMatrix(true)
+      requestAnimationFrame(paintToCanvas);
+    } else {
+      console.log("You're already in the Matrix")
+    }
 
   };
 
