@@ -1,8 +1,7 @@
-import React from "react"
+import React from "react";
 
 const Video = React.forwardRef((props, ref) => {
+  return <video ref={ref} className="video" />;
+});
 
-  return (<video ref={ref} className="video" />)
-})
-
-export default Video
+export default Video;

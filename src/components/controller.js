@@ -1,63 +1,52 @@
 import React, { useState } from "react";
 import { Row, Col, Popover, Button } from "antd";
 
-import { useVideo } from "../hooks/videoHook"
+import { useVideo } from "../hooks/videoHook";
 
-var scrollOnce = true
-var isPaused = false
-var rec // init the recorder
+var scrollOnce = true;
+var isPaused = false;
+var rec; // init the recorder
 
 const Controller = React.forwardRef((props, ref) => {
-
   const hoverContent = <div>Please Enable Your Webcam!</div>;
-  const [canvasRef, stripRef, videoStripRef, videoRef] = ref
+  const [canvasRef, stripRef, videoStripRef, videoRef] = ref;
 
   const [hover, setHover] = useState(false);
 
   const [inMatrix, setInMatrix] = useState({
     flag: false,
     btnTxt: "Matrixify"
-  })
+  });
 
   const [takingVideo, setTakingVideo] = useState({
     flag: false,
     btnTxt: "Take Video"
-  })
-
+  });
 
   const hasVideo = useVideo(videoRef);
 
   const checkMatrixState = () => {
     if (!inMatrix.flag) {
-
-      setInMatrix({ flag: true, btnTxt: "Pause" })
-      paintToCanvas()
-
+      setInMatrix({ flag: true, btnTxt: "Pause" });
+      paintToCanvas();
     } else {
-
-      isPaused = !isPaused
-      setInMatrix({ flag: true, btnTxt: isPaused ? "Paused" : "Pause" })
-
+      isPaused = !isPaused;
+      setInMatrix({ flag: true, btnTxt: isPaused ? "Paused" : "Pause" });
     }
-  }
+  };
 
   const paintToCanvas = () => {
-
     if (!isPaused) {
       let ctx = canvasRef.current.getContext("2d");
       ctx.drawImage(videoRef.current, 0, 0);
       matrixify(ctx);
-
     }
     requestAnimationFrame(paintToCanvas);
-
   };
 
-
-  const matrixify = (ctx) => {
-
-    props.streams.forEach((stream) => {
-      stream.symbols.forEach((symbol) => {
+  const matrixify = ctx => {
+    props.streams.forEach(stream => {
+      stream.symbols.forEach(symbol => {
         var imgData = ctx.getImageData(symbol.x1, symbol.y1, 7, props.fontSize);
         var brightness = symbol.getBrightness(imgData);
         var total = brightness[0] / brightness[1];
@@ -69,15 +58,12 @@ const Controller = React.forwardRef((props, ref) => {
 
     ctx.clearRect(0, 0, canvasRef.current.width, canvasRef.current.height);
 
-    props.streams.forEach(function (stream) {
+    props.streams.forEach(function(stream) {
       stream.render(ctx, canvasRef.current.height);
     });
-
   };
 
-
   const takePhoto = () => {
-
     const data1 = canvasRef.current.toDataURL("image/jpeg");
     // console.log(data1);
     var link = document.createElement("a");
@@ -90,54 +76,48 @@ const Controller = React.forwardRef((props, ref) => {
       document.querySelector(".strip").scrollIntoView({
         behavior: "smooth"
       });
-      scrollOnce = false
+      scrollOnce = false;
     }
-
   };
 
   const takeVideo = () => {
-
     if (!takingVideo.flag) {
-
-      setTakingVideo({ flag: true, btnTxt: "Stop" })
+      setTakingVideo({ flag: true, btnTxt: "Stop" });
       const chunks = []; // here we will store our recorded media chunks (Blobs)
       const stream = canvasRef.current.captureStream(); // grab our canvas MediaStream
       rec = new MediaRecorder(stream); // init the recorder
       // every time the recorder has new data, we will store it in our array
       rec.ondataavailable = e => chunks.push(e.data);
       // only when the recorder stops, we construct a complete Blob from all the chunks
-      rec.onstop = e => exportVid(new Blob(chunks, { type: 'video/webm' }));
+      rec.onstop = e => exportVid(new Blob(chunks, { type: "video/webm" }));
 
       rec.start();
-
     } else {
-      rec.stop()
-      setTakingVideo({ flag: false, btnTxt: "Take Video" })
+      rec.stop();
+      setTakingVideo({ flag: false, btnTxt: "Take Video" });
     }
-  }
+  };
 
-  const exportVid = (blob) => {
-
-    const vid = document.createElement('video');
+  const exportVid = blob => {
+    const vid = document.createElement("video");
     vid.src = URL.createObjectURL(blob);
     vid.controls = true;
 
     const link = document.createElement("a");
-    link.className = "videoLink"
-    link.download = 'myvid.webm';
+    link.className = "videoLink";
+    link.download = "myvid.webm";
     link.href = vid.src;
-    link.appendChild(vid)
+    link.appendChild(vid);
 
     videoStripRef.current.insertBefore(link, videoStripRef.current.firstChild);
     document.querySelector(".videoStrip").scrollIntoView({
       behavior: "smooth"
     });
+  };
 
-  }
-
-
-  const handleVisibleChange = show => { setHover(show); };
-
+  const handleVisibleChange = show => {
+    setHover(show);
+  };
 
   return (
     <div className="controller">
@@ -151,18 +131,25 @@ const Controller = React.forwardRef((props, ref) => {
               visible={hover}
               onVisibleChange={hasVideo ? "" : handleVisibleChange}
             >
-              <Button onClick={checkMatrixState} disabled={!hasVideo} id="matrixBtn">
+              <Button
+                onClick={checkMatrixState}
+                disabled={!hasVideo}
+                id="matrixBtn"
+              >
                 {inMatrix.btnTxt}
               </Button>
             </Popover>
           </div>
         </Col>
         <Col span={24} className="col">
-          <Button onClick={takePhoto} disabled={!inMatrix.flag}>Take Photo</Button>
-
+          <Button onClick={takePhoto} disabled={!inMatrix.flag}>
+            Take Photo
+          </Button>
         </Col>
         <Col span={24} className="col">
-          <Button onClick={takeVideo} disabled={!inMatrix.flag}>{takingVideo.btnTxt}</Button>
+          <Button onClick={takeVideo} disabled={!inMatrix.flag}>
+            {takingVideo.btnTxt}
+          </Button>
         </Col>
       </Row>
     </div>

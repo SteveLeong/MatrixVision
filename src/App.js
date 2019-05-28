@@ -5,38 +5,43 @@ import "./css/main.css";
 
 import NavBar from "./components/navBar";
 import Controller from "./components/controller";
-import Video from "./components/video"
-import Canvas from "./components/canvas"
-import { setUp } from "./scripts/setup"
+import Video from "./components/video";
+import Canvas from "./components/canvas";
+import { setUp } from "./scripts/setup";
 
 class App extends Component {
-
   constructor(props) {
-
     super(props);
 
     this.sfontSize = 11;
     this.symbols = new Array(25);
     this.symbolData = []; // All 96 Katakana symbols and their respective RGB totals
     this.streams = [];
-    this.video = React.createRef()
-    this.strip = React.createRef()
-    this.videoStrip = React.createRef()
-    this.canvas = React.createRef()
-    this.controllerRefs = [this.canvas, this.strip, this.videoStrip, this.video] // can't send multiple refs to one component
-
+    this.video = React.createRef();
+    this.strip = React.createRef();
+    this.videoStrip = React.createRef();
+    this.canvas = React.createRef();
+    this.controllerRefs = [
+      this.canvas,
+      this.strip,
+      this.videoStrip,
+      this.video
+    ]; // can't send multiple refs to one component
   }
 
   componentDidMount() {
-
     this.ctx = this.canvas.current.getContext("2d");
-    setUp(this.canvas, this.ctx, this.sfontSize, this.symbols, this.symbolData, this.streams)
-
+    setUp(
+      this.canvas,
+      this.ctx,
+      this.sfontSize,
+      this.symbols,
+      this.symbolData,
+      this.streams
+    );
   }
 
-
   render() {
-
     return (
       <div>
         <NavBar />
@@ -71,7 +76,6 @@ class App extends Component {
         </div>
       </div>
     );
-
   }
 }
 
